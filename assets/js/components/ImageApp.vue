@@ -6,80 +6,93 @@
                     <h1 class="text-center">Ponka-fy Me</h1>
                 </div>
             </div>
+
             <div class="row no-gutters">
                 <div class="col-xs-12 col-md-6 px-5" style="background-color: #659dbd; padding-bottom: 150px;">
                     <h2 class="text-center mb-5 pt-5 text-white">First: Upload Photo</h2>
                     <imageUploader
-                        v-on:new-image="onNewUploadedImage"
-                    ></imageUploader>
+                        @new-image="onNewUploadedImage"
+                    />
                 </div>
+
                 <div class="col-xs-12 col-md-6 px-5" style="background-color: #7FB7D7; min-height: 40rem; padding-bottom: 150px;">
                     <h2 class="text-center mb-5 pt-5 text-white">Second: Download Improved Photo</h2>
                     <imageList
-                        v-bind:images="images"
-                        v-on:delete-image="onDeleteImage"
-                    ></imageList>
+                        :images="images"
+                        @delete-image="onDeleteImage"
+                    />
                 </div>
             </div>
+
             <footer class="footer">
-                
-                    <p class="text-muted my-5 text-center">Made with love by the <a style="text-decoration: underline; color: #6c757d; font-weight: bold;" href="http://www.symfonycasts.com">SymfonyCasts</a> Team</p>
-                
+                <p class="text-muted my-5 text-center">
+                    Made with love by the
+                    <a style="text-decoration: underline; color: #6c757d; font-weight: bold;" href="http://www.symfonycasts.com">
+                        SymfonyCasts
+                    </a>
+                    Team
+                </p>
             </footer>
         </div>
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
-    import imageList from './ImageList';
-    import imageUploader from './ImageUploader';
+import axios from 'axios';
+import imageList from './ImageList.vue';
+import imageUploader from './ImageUploader.vue';
 
-    export default {
-        components: {
-            imageList,
-            imageUploader
+export default {
+    components: {
+        imageList,
+        imageUploader
+    },
+
+    data() {
+        return {
+            images: []
+        };
+    },
+
+    methods: {
+        onNewUploadedImage(image) {
+            // avoid duplicates
+            if (this.images.find(oneImage => oneImage.id === image.id)) {
+                return;
+            }
+
+            this.images.unshift(image);
         },
-        methods: {
-            onNewUploadedImage(image) {
-                // bail if already found - solves a race condition
-                // when upload and polling finish at similar time
-                if (this.images.find(oneImage => oneImage.id === image.id)) {
-                    return;
+
+        onDeleteImage(image) {
+            axios.delete(image['@id']).then(() => {
+                const index = this.images.indexOf(image);
+                if (index !== -1) {
+                    this.images.splice(index, 1); // Vue 3 way
                 }
+            });
+        },
 
-                this.images.unshift(image);
-            },
-            onDeleteImage(image) {
-                axios
-                    .delete(image['@id'])
-                    .then(() => {
-                        this.$delete(this.images, this.images.indexOf(image));
-                    })
-            },
-            fetchImagesData() {
-                axios
-                    .get('/api/images')
-                    .then(response => (this.images = response.data.items))
-            }
-        },
-        data() {
-            return {
-                images: []
-            }
-        },
-        mounted() {
-            this.fetchImagesData();
+        fetchImagesData() {
+            axios.get('/api/images')
+                .then(response => {
+                    this.images = response.data.items;
+                });
         }
+    },
+
+    mounted() {
+        this.fetchImagesData();
     }
+};
 </script>
 
 <style scoped lang="scss">
-    .footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        min-height: 60px;
-        background-color: #f5f5f5;
-    }
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    min-height: 60px;
+    background-color: #f5f5f5;
+}
 </style>
