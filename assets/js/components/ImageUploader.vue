@@ -44,3 +44,12 @@ export default {
     }
 };
 </script>
+
+
+<style>
+.filepond--credits,
+.filepond--credits * {
+    display: none !important;
+}
+
+</style>
