@@ -1,10 +1,13 @@
-import Vue from 'vue';
-import ImageApp from './components/ImageApp';
+import { createApp } from 'vue';
+import ImageApp from './components/ImageApp.vue';
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';
 
-Vue.component('image-app', ImageApp);
+const app = createApp({});
 
-const app = new Vue({
-    el: '#images-app'
-});
+// Register your component
+app.component('image-app', ImageApp);
+
+// Mount the app
+app.mount('#images-app');

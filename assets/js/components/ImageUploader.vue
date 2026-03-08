@@ -1,35 +1,55 @@
 <template>
     <div>
-        <vue-dropzone
-            id="dropzone"
-            ref="vueDropzone"
-            v-on:vdropzone-success="onDropzoneSuccess"
-            :options="dropzoneOptions"
-        ></vue-dropzone>
+        <FilePond
+            name="file"
+            ref="pond"
+            :server="serverConfig"
+            @processfile="onProcessFile"
+        />
     </div>
 </template>
 
 <script>
-    import vue2Dropzone from 'vue2-dropzone'
-    import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import vueFilePond from "vue-filepond";
+import "filepond/dist/filepond.min.css";
 
-    export default {
-        components: {
-            vueDropzone: vue2Dropzone
-        },
-        methods: {
-            onDropzoneSuccess(file, response) {
-                this.$emit('new-image', response);
-                this.$refs.vueDropzone.removeFile(file);
-            }
-        },
-        data: function () {
-            return {
-                dropzoneOptions: {
-                    url: '/api/images',
-                    thumbnailWidth: 150
+// Optional: image preview plugin
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+
+const FilePond = vueFilePond(FilePondPluginImagePreview);
+
+export default {
+    components: { FilePond },
+
+    data() {
+        return {
+            serverConfig: {
+                process: {
+                    url: "/api/images",
+                    method: "POST",
+                    onload: response => response // return server response
                 }
             }
+        };
+    },
+
+    methods: {
+        onProcessFile(error, file) {
+            if (error) return;
+
+            const response = JSON.parse(file.serverId);
+            this.$emit("new-image", response);
         }
     }
+};
 </script>
+
+
+<style>
+.filepond--credits,
+.filepond--credits * {
+    display: none !important;
+}
+
+</style>
