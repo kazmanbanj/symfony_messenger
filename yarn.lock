@@ -1930,6 +1930,16 @@ fastest-levenshtein@^1.0.12, fastest-levenshtein@^1.0.16:
   resolved "https://registry.yarnpkg.com/fastest-levenshtein/-/fastest-levenshtein-1.0.16.tgz#210e61b6ff181de91ea9b3d1b84fdedd47e034e5"
   integrity sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==
 
+filepond-plugin-image-preview@^4.6.12:
+  version "4.6.12"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.6.12.tgz#adcff8be50f001e21ca8221a53c6870b63ebe0fe"
+  integrity sha512-Y8ETX5QVV0mbPB0586UH8AUmG9tZg8PuN5bdEAIlZVJFTct5ebViJ7+Am94/VhTPjLqZjBf1zmDq5JU6XRsZKw==
+
+filepond@^4.32.12:
+  version "4.32.12"
+  resolved "https://registry.yarnpkg.com/filepond/-/filepond-4.32.12.tgz#ddc6551401d0ee1602c577affa75409daf6a21ce"
+  integrity sha512-wro0/deLwua9CkL7HJygOlDaPo1c7Ov8kfzbZjH7m4hdi56gdHGDeRWnYa+qXnRm3Lty69gUGVFb3JZy/9vT8g==
+
 find-up@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/find-up/-/find-up-4.1.0.tgz#97afe7d6cdc0bc5928584b7c8d7b16e8a9aa5d19"
@@ -3024,6 +3034,11 @@ uuid@^8.3.0:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
+
+vue-filepond@^7.0.4:
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/vue-filepond/-/vue-filepond-7.0.4.tgz#6a01c092c38aaf1cfe7baa7cb43a0ed9e0441f00"
+  integrity sha512-HvWlCG8qjvyykrpPTDjJ+JqsHTXt5/0zWMX9vu7kU3JXCUODPUkGi9prZcauOnIZ4MqyeSZ9M0sDVwdMATyt1g==
 
 vue-loader@^17:
   version "17.4.2"

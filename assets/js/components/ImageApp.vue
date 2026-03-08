@@ -10,14 +10,12 @@
             <div class="row no-gutters">
                 <div class="col-xs-12 col-md-6 px-5" style="background-color: #659dbd; padding-bottom: 150px;">
                     <h2 class="text-center mb-5 pt-5 text-white">First: Upload Photo</h2>
-                    <imageUploader
-                        @new-image="onNewUploadedImage"
-                    />
+                    <image-uploader @new-image="onNewUploadedImage" />
                 </div>
 
                 <div class="col-xs-12 col-md-6 px-5" style="background-color: #7FB7D7; min-height: 40rem; padding-bottom: 150px;">
                     <h2 class="text-center mb-5 pt-5 text-white">Second: Download Improved Photo</h2>
-                    <imageList
+                    <image-list
                         :images="images"
                         @delete-image="onDeleteImage"
                     />

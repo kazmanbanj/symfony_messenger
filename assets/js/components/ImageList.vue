@@ -1,7 +1,7 @@
 <template>
     <div>
         <transition-group name="list" tag="ul">
-            <imageItem
+            <image-item
                 v-for="image in images"
                 :key="image.id"
                 :url="image.url"
@@ -14,32 +14,16 @@
 </template>
 
 <script>
-import imageItem from './ImageItem.vue';
+import imageItem from "./ImageItem.vue";
 
 export default {
-    components: {
-        imageItem
-    },
-
-    props: ['images'],
+    components: { imageItem },
+    props: ["images"],
 
     methods: {
         onDeleteImage(image) {
-            this.$emit('delete-image', image);
+            this.$emit("delete-image", image);
         }
     }
 };
 </script>
-
-<style scoped lang="scss">
-.list-enter-active, .list-leave-active {
-  transition: all 1s;
-}
-.list-enter, .list-leave-to {
-  opacity: 0;
-  transform: translateY(30px);
-}
-ul {
-    list-style: none;
-}
-</style>
