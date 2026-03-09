@@ -121,5 +121,7 @@ us do what we love!
 - create messgae
 - create message handler
 - uncomment transport config in env
-- composer require symfony/doctrine-messenger (from 5.1)
+- composer require symfony/doctrine-messenger (from symfony 5.1)
+- ./bin/console messenger:consume -vv (to run worker)
+
 

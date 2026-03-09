@@ -42,7 +42,6 @@ class ImagePostController extends AbstractController
         ValidatorInterface $validator,
         PhotoFileManager $photoManager,
         EntityManagerInterface $entityManager,
-        PhotoPonkaficator $ponkaficator,
         MessageBusInterface $messageBus
     ) {
         /** @var UploadedFile $imageFile */
@@ -65,7 +64,7 @@ class ImagePostController extends AbstractController
         $entityManager->persist($imagePost);
         $entityManager->flush();
 
-        $message = new AddPonkaToImage($imagePost);
+        $message = new AddPonkaToImage($imagePost->getId());
         $messageBus->dispatch($message);
 
         return $this->toJson($imagePost, 201);
@@ -76,7 +75,7 @@ class ImagePostController extends AbstractController
      */
     public function delete(ImagePost $imagePost, MessageBusInterface $messageBus)
     {
-        $messageBus->dispatch(new DeleteImagePost($imagePost));
+        $messageBus->dispatch(new DeleteImagePost($imagePost->getId()));
 
         return new Response(null, 204);
     }
