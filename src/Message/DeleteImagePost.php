@@ -2,17 +2,19 @@
 
 namespace App\Message;
 
+use App\Entity\ImagePost;
+
 class DeleteImagePost
 {
-    private int $imagePostId;
+    private ImagePost $imagePost;
 
-    public function __construct(int $imagePostId)
+    public function __construct(ImagePost $imagePost)
     {
-        $this->imagePostId = $imagePostId;
+        $this->imagePost = $imagePost;
     }
 
-    public function getImagePostId(): int
+    public function getImagePost(): ImagePost
     {
-        return $this->imagePostId;
+        return $this->imagePost;
     }
 }

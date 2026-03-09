@@ -75,7 +75,7 @@ class ImagePostController extends AbstractController
      */
     public function delete(ImagePost $imagePost, MessageBusInterface $messageBus)
     {
-        $messageBus->dispatch(new DeleteImagePost($imagePost->getId()));
+        $messageBus->dispatch(new DeleteImagePost($imagePost));
 
         return new Response(null, 204);
     }
