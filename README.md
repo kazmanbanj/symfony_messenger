@@ -114,3 +114,12 @@ And as always, thanks so much for your support and letting
 us do what we love!
 
 <3 Your friends at SymfonyCasts
+
+
+## steps
+- composer require messenger
+- create messgae
+- create message handler
+- uncomment transport config in env
+- composer require symfony/doctrine-messenger (from 5.1)
+
