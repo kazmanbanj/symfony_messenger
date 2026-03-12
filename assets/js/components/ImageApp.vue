@@ -53,20 +53,22 @@ export default {
     },
 
     methods: {
-        onNewUploadedImage(image) {
-            // avoid duplicates
-            if (this.images.find(oneImage => oneImage.id === image.id)) {
-                return;
-            }
+        onNewUploadedImage(payload) {
+            const newImages = Array.isArray(payload) ? payload : [payload];
 
-            this.images.unshift(image);
+            newImages.forEach(image => {
+                // avoid duplicates
+                if (!this.images.find(i => i.id === image.id)) {
+                    this.images.unshift(image);
+                }
+            });
         },
 
         onDeleteImage(image) {
             axios.delete(image['@id']).then(() => {
                 const index = this.images.indexOf(image);
                 if (index !== -1) {
-                    this.images.splice(index, 1); // Vue 3 way
+                    this.images.splice(index, 1);
                 }
             });
         },

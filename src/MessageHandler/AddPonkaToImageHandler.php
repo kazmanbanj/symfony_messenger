@@ -39,13 +39,15 @@ class AddPonkaToImageHandler implements MessageHandlerInterface, LoggerAwareInte
         $imagePost = $this->imagePostRepository->find($imagePostId);
 
         if (!$imagePost) {
-            // could throw an exception... it would be retried
-            // or return and this message will be discarded
             if ($this->logger) {
                 $this->logger->alert(sprintf('Image post %d was missing!', $imagePostId));
             }
             return;
         }
+
+        // if (rand(0, 10) < 7 || true) {
+        //     throw new \Exception('failed randomly!!!');
+        // }
 
         $updatedContents = $this->ponkaficator->ponkafy(
             $this->photoManager->read($imagePost->getFilename())

@@ -122,6 +122,6 @@ us do what we love!
 - create message handler
 - uncomment transport config in env
 - composer require symfony/doctrine-messenger (from symfony 5.1)
-- ./bin/console messenger:consume -vv (to run worker)
-
-
+- ./bin/console messenger:consume -vv async (to run worker)
+- php bin/console config:dump framework messenger (to view all avaialble options under messenger.yaml)
+- php bin/console debug:config framework messenger (to view current and default config in messenger.yaml)

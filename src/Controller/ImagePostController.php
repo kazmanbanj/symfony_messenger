@@ -14,7 +14,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -47,16 +49,23 @@ class ImagePostController extends AbstractController
         /** @var UploadedFile $imageFile */
         $imageFile = $request->files->get('file');
 
+        if (!$imageFile) {
+            return $this->json(['error' => 'No file uploaded'], 400);
+        }
+
         $errors = $validator->validate($imageFile, [
             new Image(),
             new NotBlank()
         ]);
 
         if (count($errors) > 0) {
-            return $this->toJson($errors, 400);
+            return $this->json($errors, 400);
         }
 
+        // Upload file
         $newFilename = $photoManager->uploadImage($imageFile);
+
+        // Create entity
         $imagePost = new ImagePost();
         $imagePost->setFilename($newFilename);
         $imagePost->setOriginalFilename($imageFile->getClientOriginalName());
@@ -64,10 +73,15 @@ class ImagePostController extends AbstractController
         $entityManager->persist($imagePost);
         $entityManager->flush();
 
+        // Dispatch async processing
         $message = new AddPonkaToImage($imagePost->getId());
-        $messageBus->dispatch($message);
+        $envelope = new Envelope($message, [
+            new DelayStamp(500)
+        ]);
+        $messageBus->dispatch($envelope);
 
-        return $this->toJson($imagePost, 201);
+        // FilePond expects a STRING serverId
+        return $this->json($imagePost, 201);
     }
 
     /**
@@ -75,6 +89,8 @@ class ImagePostController extends AbstractController
      */
     public function delete(ImagePost $imagePost, MessageBusInterface $messageBus)
     {
+        sleep(1); // Simulate some delay for better UX
+
         $messageBus->dispatch(new DeleteImagePost($imagePost));
 
         return new Response(null, 204);
