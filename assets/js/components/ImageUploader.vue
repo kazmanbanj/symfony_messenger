@@ -3,6 +3,8 @@
         <FilePond
             name="file"
             ref="pond"
+            allow-multiple="true"
+            :max-files="10"
             :server="serverConfig"
             @processfile="onProcessFile"
         />
@@ -12,6 +14,7 @@
 <script>
 import vueFilePond from "vue-filepond";
 import "filepond/dist/filepond.min.css";
+
 
 // Optional: image preview plugin
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -28,8 +31,9 @@ export default {
                 process: {
                     url: "/api/images",
                     method: "POST",
-                    onload: response => response // return server response
-                }
+                    onload: response => response // server returns filename or JSON
+                },
+                // revert: "/api/images/revert"
             }
         };
     },
@@ -38,7 +42,10 @@ export default {
         onProcessFile(error, file) {
             if (error) return;
 
+            // FilePond returns serverId as a string
             const response = JSON.parse(file.serverId);
+
+            // Emit each uploaded image to parent
             this.$emit("new-image", response);
         }
     }

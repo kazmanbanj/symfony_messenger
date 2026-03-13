@@ -114,3 +114,14 @@ And as always, thanks so much for your support and letting
 us do what we love!
 
 <3 Your friends at SymfonyCasts
+
+
+## steps
+- composer require messenger
+- create messgae
+- create message handler
+- uncomment transport config in env
+- composer require symfony/doctrine-messenger (from symfony 5.1)
+- ./bin/console messenger:consume -vv async (to run worker)
+- php bin/console config:dump framework messenger (to view all avaialble options under messenger.yaml)
+- php bin/console debug:config framework messenger (to view current and default config in messenger.yaml)
