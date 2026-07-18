@@ -89,7 +89,7 @@ class ImagePostController extends AbstractController
      */
     public function delete(ImagePost $imagePost, MessageBusInterface $messageBus)
     {
-        sleep(1); // Simulate some delay for better UX
+        // sleep(1); // Simulate some delay for better UX
 
         $messageBus->dispatch(new DeleteImagePost($imagePost));
 
@@ -104,7 +104,7 @@ class ImagePostController extends AbstractController
         return $this->toJson($imagePost);
     }
 
-    private function toJson($data, int $status = 200, array $headers = [], array $context = []): JsonResponse
+    private function toJson(mixed $data, int $status = 200, array $headers = [], array $context = []): JsonResponse
     {
         // add the image:output group by default
         if (!isset($context['groups'])) {

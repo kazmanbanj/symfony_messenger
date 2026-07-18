@@ -35,6 +35,13 @@
         "platform": {},
         "allow-plugins": {
             "symfony/flex": true
+        },
+        "config": {
+            "policy": {
+                "advisories": {
+                    "block": false
+                }
+            }
         }
     },
     "autoload": {

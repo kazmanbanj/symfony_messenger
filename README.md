@@ -127,3 +127,4 @@ us do what we love!
 - php bin/console debug:config framework messenger (to view current and default config in messenger.yaml)
 
 - php bin/console cache:clear
+- ./phpunit --version // run phpunit
