@@ -3,8 +3,9 @@
 namespace App\Photo;
 
 use App\Entity\ImagePost;
-use League\Flysystem\AdapterInterface;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\Visibility;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -13,13 +14,13 @@ class PhotoFileManager
     private $filesystem;
     private $publicAssetBaseUrl;
 
-    public function __construct(FilesystemInterface $photoFilesystem, string $publicAssetBaseUrl)
+    public function __construct(FilesystemOperator $photoFilesystem, string $publicAssetBaseUrl)
     {
         $this->filesystem = $photoFilesystem;
         $this->publicAssetBaseUrl = $publicAssetBaseUrl;
     }
 
-    public function uploadImage(File $file)
+    public function uploadImage(File|UploadedFile $file)
     {
         if ($file instanceof UploadedFile) {
             $originalFilename = $file->getClientOriginalName();
@@ -33,7 +34,7 @@ class PhotoFileManager
             $newFilename,
             $stream,
             [
-                'visibility' => AdapterInterface::VISIBILITY_PUBLIC
+                'visibility' => Visibility::PUBLIC
             ]
         );
 
@@ -68,6 +69,6 @@ class PhotoFileManager
 
     public function update(string $filename, string $updatedContents): void
     {
-        $this->filesystem->update($filename, $updatedContents);
+        $this->filesystem->write($filename, $updatedContents);
     }
 }

@@ -2,11 +2,17 @@
     <li :class="{ deleting: isDeleting }" class="text-white pt-3">
         <div class="d-flex flex-row">
             <div>
-                <a :href="url" target="_blank">
+                <a :href="absoluteUrl(url)" target="_blank">
                     <img
-                        :src="url"
+                        v-if="!loadFailed"
+                        :src="absoluteUrl(url)"
                         :alt="originalFilename"
+                        @error="onImgError"
+                        @load="onImgLoad"
                     >
+                    <div v-else style="width:100px; height:60px; background:#ddd; display:flex; align-items:center; justify-content:center; color:#666; font-size:12px;">
+                        preview unavailable
+                    </div>
                 </a>
             </div>
 
@@ -43,7 +49,8 @@ export default {
         return {
             isDeleting: false,
             ponkaAddedAgo: null,
-            timer: null
+            timer: null,
+            loadFailed: false
         };
     },
 
@@ -61,6 +68,19 @@ export default {
 
         updatePonkaAddedAgo() {
             this.ponkaAddedAgo = moment(this.ponkaAddedAt).fromNow();
+        },
+        onImgError() {
+            console.error('Image failed to load:', this.url, this.absoluteUrl(this.url));
+            this.loadFailed = true;
+        },
+        onImgLoad() {
+            this.loadFailed = false;
+        },
+        absoluteUrl(url) {
+            if (!url) return url;
+            if (url.startsWith('http://') || url.startsWith('https://')) return url;
+            const path = url.startsWith('/') ? url : '/' + url;
+            return window.location.origin + encodeURI(path);
         }
     },
 

@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\ImagePost;
 use App\Message\AddPonkaToImage;
 use App\Message\DeleteImagePost;
-use App\Photo\PhotoPonkaficator;
 use App\Repository\ImagePostRepository;
 use App\Photo\PhotoFileManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,28 +16,37 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ImagePostController extends AbstractController
 {
-    /**
-     * @Route("/api/images", methods="GET")
-     */
-    public function list(ImagePostRepository $repository)
+    #[Route('/api/images', methods: ['GET'])]
+    public function list(ImagePostRepository $repository, PhotoFileManager $photoManager, UrlGeneratorInterface $router)
     {
         $posts = $repository->findBy([], ['createdAt' => 'DESC']);
 
+        $items = [];
+        foreach ($posts as $post) {
+            $items[] = [
+                'id' => $post->getId(),
+                'originalFilename' => $post->getOriginalFilename(),
+                'ponkaAddedAt' => $post->getPonkaAddedAt(),
+                'createdAt' => $post->getCreatedAt(),
+                '@id' => '/api/images/'.$post->getId(),
+                'url' => $photoManager->getPublicPath($post),
+            ];
+        }
+
         return $this->toJson([
-            'items' => $posts
+            'items' => $items
         ]);
     }
 
-    /**
-     * @Route("/api/images", methods="POST")
-     */
+    #[Route('/api/images', methods: ['POST'])]
     public function create(
         Request $request,
         ValidatorInterface $validator,
@@ -59,7 +67,14 @@ class ImagePostController extends AbstractController
         ]);
 
         if (count($errors) > 0) {
-            return $this->json($errors, 400);
+            $messages = [];
+            foreach ($errors as $err) {
+                $messages[] = $err->getMessage();
+            }
+
+            $detail = implode(" ", $messages);
+
+            return $this->json(['detail' => $detail], 400);
         }
 
         // Upload file
@@ -80,13 +95,19 @@ class ImagePostController extends AbstractController
         ]);
         $messageBus->dispatch($envelope);
 
-        // FilePond expects a STRING serverId
-        return $this->json($imagePost, 201);
+        // FilePond expects a STRING serverId, but we want to return the full item
+        // shape so the client can render the newly uploaded image immediately.
+        return $this->json([
+            'id' => $imagePost->getId(),
+            'originalFilename' => $imagePost->getOriginalFilename(),
+            'ponkaAddedAt' => $imagePost->getPonkaAddedAt(),
+            'createdAt' => $imagePost->getCreatedAt(),
+            '@id' => '/api/images/'.$imagePost->getId(),
+            'url' => $photoManager->getPublicPath($imagePost),
+        ], 201);
     }
 
-    /**
-     * @Route("/api/images/{id}", methods="DELETE")
-     */
+    #[Route('/api/images/{id}', methods: ['DELETE'])]
     public function delete(ImagePost $imagePost, MessageBusInterface $messageBus)
     {
         // sleep(1); // Simulate some delay for better UX
@@ -96,9 +117,7 @@ class ImagePostController extends AbstractController
         return new Response(null, 204);
     }
 
-    /**
-     * @Route("/api/images/{id}", methods="GET", name="get_image_post_item")
-     */
+    #[Route('/api/images/{id}', methods: ['GET'], name: 'get_image_post_item')]
     public function getItem(ImagePost $imagePost)
     {
         return $this->toJson($imagePost);

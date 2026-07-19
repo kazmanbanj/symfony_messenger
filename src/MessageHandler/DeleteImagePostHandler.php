@@ -5,10 +5,11 @@ namespace App\MessageHandler;
 use App\Message\DeleteImagePost;
 use App\Message\DeletePhotoFile;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class DeleteImagePostHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class DeleteImagePostHandler
 {
     private $messageBus;
     private $entityManager;

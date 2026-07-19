@@ -10,7 +10,7 @@
             <div class="row no-gutters">
                 <div class="col-xs-12 col-md-6 px-5" style="background-color: #659dbd; padding-bottom: 150px;">
                     <h2 class="text-center mb-5 pt-5 text-white">First: Upload Photo</h2>
-                    <image-uploader @new-image="onNewUploadedImage" />
+                    <image-uploader @new-image="onNewUploadedImage" @upload-error="onUploadError" />
                 </div>
 
                 <div class="col-xs-12 col-md-6 px-5" style="background-color: #7FB7D7; min-height: 40rem; padding-bottom: 150px;">
@@ -65,12 +65,23 @@ export default {
         },
 
         onDeleteImage(image) {
-            axios.delete(image['@id']).then(() => {
-                const index = this.images.indexOf(image);
-                if (index !== -1) {
-                    this.images.splice(index, 1);
-                }
+            const index = this.images.indexOf(image);
+            if (index === -1) {
+                return;
+            }
+
+            const removedImage = this.images.splice(index, 1)[0];
+
+            axios.delete(image['@id']).catch(() => {
+                // restore the image if delete fails
+                this.images.splice(index, 0, removedImage);
+                alert('Could not remove the image. It has been restored.');
             });
+        },
+
+        onUploadError(message) {
+            // simple UX: alert the user (could be replaced with nicer UI)
+            alert(message || 'Upload error');
         },
 
         fetchImagesData() {

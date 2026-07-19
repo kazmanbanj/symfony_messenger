@@ -9,9 +9,10 @@ use App\Repository\ImagePostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class AddPonkaToImageHandler implements MessageHandlerInterface, LoggerAwareInterface
+#[AsMessageHandler]
+class AddPonkaToImageHandler implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
