@@ -51,7 +51,7 @@ to get our app running. Make sure to install Node and also
 
 ```
 yarn install
-yarn encore dev
+yarn dev
 ```
 
 **Start the built-in web server**
@@ -127,3 +127,4 @@ us do what we love!
 - php bin/console debug:config framework messenger (to view current and default config in messenger.yaml)
 
 - php bin/console cache:clear
+- ./vendor/bin/phpunit // run phpunit

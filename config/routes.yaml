@@ -1,3 +1,23 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+homepage:
+    path: /
+    controller: App\Controller\MainController::homepage
+
+api_images_list:
+    path: /api/images
+    controller: App\Controller\ImagePostController::list
+    methods: [GET]
+
+api_images_create:
+    path: /api/images
+    controller: App\Controller\ImagePostController::create
+    methods: [POST]
+
+api_image_delete:
+    path: /api/images/{id}
+    controller: App\Controller\ImagePostController::delete
+    methods: [DELETE]
+
+api_image_get:
+    path: /api/images/{id}
+    controller: App\Controller\ImagePostController::getItem
+    methods: [GET]
