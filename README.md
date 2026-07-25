@@ -125,6 +125,7 @@ us do what we love!
 - ./bin/console messenger:consume -vv async_priority_high async (to run worker)
 - php bin/console config:dump framework messenger (to view all avaialble options under messenger.yaml)
 - php bin/console debug:config framework messenger (to view current and default config in messenger.yaml)
+- ./bin/console debug:container async
 
 - php bin/console cache:clear
 - ./vendor/bin/phpunit // run phpunit
