@@ -1,8 +1,8 @@
 <?php
 
-namespace App\MessageHandler;
+namespace App\MessageHandler\Command;
 
-use App\Message\DeleteImagePost;
+use App\Message\Command\DeleteImagePost;
 use App\Message\Event\ImagePostDeletedEvent;
 // use App\Message\DeletePhotoFile;
 use Doctrine\ORM\EntityManagerInterface;
