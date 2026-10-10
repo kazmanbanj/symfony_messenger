@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Message;
+namespace App\Message\Command;
 
 class AddPonkaToImage
 {
-    private $imagePostId;
+    private int $imagePostId;
 
     public function __construct(int $imagePostId)
     {

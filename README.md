@@ -59,11 +59,6 @@ yarn dev
 You can use Nginx or Apache, but Symfony's local web server
 works even better.
 
-To install the Symfony local web server, follow
-"Downloading the Symfony client" instructions found
-here: https://symfony.com/download - you only need to do this
-once on your system.
-
 Then, to start the web server, open a terminal, move into the
 project, and run:
 
@@ -78,44 +73,6 @@ Now check out the site at `https://localhost:8000`
 
 Have fun!
 
-## The Messenger
-
-My work is loving the world.
-Here the sunflowers, there the hummingbird -
-equal seekers of sweetness.
-Here the quickening yeast; there the blue plums.
-Here the clam deep in the speckled sand.
-Are my boots old? Is my coat torn?
-Am I no longer young and still not half-perfect? Let me
-keep my mind on what matters,
-which is my work,
-which is mostly standing still and learning to be astonished.
-The phoebe, the delphinium.
-The sheep in the pasture, and the pasture.
-Which is mostly rejoicing, since all ingredients are here,
-Which is gratitude, to be given a mind and a heart
-and these body-clothes,
-a mouth with which to give shouts of joy
-to the moth and the wren, to the sleepy dug-up clam,
-telling them all, over and over, how it is
-that we live forever.
-
-[Mary Oliver - Thirst](http://maryoliver.beacon.org/2009/11/thirst/)
-
-## Have Ideas, Feedback or an Issue?
-
-If you have suggestions or questions, please feel free to
-open an issue on this repository or comment on the course
-itself. We're watching both :).
-
-## Thanks!
-
-And as always, thanks so much for your support and letting
-us do what we love!
-
-<3 Your friends at SymfonyCasts
-
-
 ## steps
 - composer require messenger
 - create messgae
@@ -125,6 +82,54 @@ us do what we love!
 - ./bin/console messenger:consume -vv async_priority_high async (to run worker)
 - php bin/console config:dump framework messenger (to view all avaialble options under messenger.yaml)
 - php bin/console debug:config framework messenger (to view current and default config in messenger.yaml)
+- ./bin/console debug:container async
 
 - php bin/console cache:clear
 - ./vendor/bin/phpunit // run phpunit
+
+You’re using Homebrew on Apple Silicon, so Supervisor is under `/opt/homebrew`, not `/usr/local`.
+
+Your relevant paths are:
+
+```sh
+/opt/homebrew/etc/supervisord.conf
+/opt/homebrew/etc/supervisor.d/
+```
+
+Your Symfony worker config is already linked there:
+
+```sh
+/opt/homebrew/etc/supervisor.d/messenger-worker.ini
+```
+
+It points to:
+
+```sh
+config/messenger-worker.ini
+```
+
+To list managed processes, use:
+
+```sh
+supervisorctl status
+```
+
+```sh
+supervisorctl -c /opt/homebrew/etc/supervisord.conf start 'messenger-consume:*'
+supervisorctl -c /opt/homebrew/etc/supervisord.conf stop 'messenger-consume:*'
+```
+
+It currently can’t connect because access to Supervisor’s socket is denied. Try it directly in your Terminal (outside the IDE sandbox), or inspect whether the service is running:
+
+```sh
+brew services list | rg supervisor
+```
+
+To consume all processes
+```sh
+ps -A | grep messenger:consume
+```
+from this, we can stop a process with the below command
+```sh
+kill process_id
+```
