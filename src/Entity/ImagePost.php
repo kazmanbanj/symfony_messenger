@@ -21,11 +21,11 @@ class ImagePost
     #[Groups('image:output')]
     private $originalFilename;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     #[Groups('image:output')]
     private $ponkaAddedAt;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime_immutable')]
     #[Groups('image:output')]
     private $createdAt;
 

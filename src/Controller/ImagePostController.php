@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\ImagePost;
-use App\Message\AddPonkaToImage;
-use App\Message\DeleteImagePost;
+use App\Message\Command\AddPonkaToImage;
+use App\Message\Command\DeleteImagePost;
 use App\Repository\ImagePostRepository;
 use App\Photo\PhotoFileManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -91,7 +91,7 @@ class ImagePostController extends AbstractController
         // Dispatch async processing
         $message = new AddPonkaToImage($imagePost->getId());
         $envelope = new Envelope($message, [
-            new DelayStamp(500)
+            // new DelayStamp(500)
         ]);
         $messageBus->dispatch($envelope);
 
