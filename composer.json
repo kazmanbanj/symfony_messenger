@@ -14,6 +14,7 @@
         "intervention/image": "^2.4",
         "league/flysystem-bundle": "^3.7",
         "phpdocumentor/reflection-docblock": "^5.0",
+        "symfony/amqp-messenger": "7.3.*",
         "symfony/browser-kit": "^7.3",
         "symfony/console": "^7.3",
         "symfony/css-selector": "^7.3",

@@ -91,6 +91,7 @@ export default {
 
     beforeUnmount() {
         clearInterval(this.timer);
+        $(this.$el).find('button').tooltip('dispose');
     },
 
     mounted() {
