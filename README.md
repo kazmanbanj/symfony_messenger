@@ -119,6 +119,14 @@ supervisorctl -c /opt/homebrew/etc/supervisord.conf start 'messenger-consume:*'
 supervisorctl -c /opt/homebrew/etc/supervisord.conf stop 'messenger-consume:*'
 ```
 
+to stop supervisor
+```sh
+supervisorctl -c /opt/homebrew/etc/supervisord.conf stop 'messenger-consume:*'
+supervisorctl -c /opt/homebrew/etc/supervisord.conf reread
+supervisorctl -c /opt/homebrew/etc/supervisord.conf update messenger-consume
+supervisorctl -c /opt/homebrew/etc/supervisord.conf status
+```
+
 It currently can’t connect because access to Supervisor’s socket is denied. Try it directly in your Terminal (outside the IDE sandbox), or inspect whether the service is running:
 
 ```sh
