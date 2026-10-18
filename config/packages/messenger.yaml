@@ -18,6 +18,7 @@ framework:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
             async:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                # serializer: messenger.transport.symfony_serializer
                 retry_strategy:
                     delay: 200
                 options:
@@ -38,6 +39,22 @@ framework:
                     queues:
                         messages_high:
                             binding_keys: [high]
+
+            external_messages:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                serializer: App\Messenger\ExternalJsonMessengerSerializer
+                # retry_strategy:
+                #     delay: 200
+                options:
+                    auto_setup: false
+                    # exchange:
+                    #     name: external_messages
+                    #     type: direct
+                    #     default_publish_routing_key: normal
+                    queues:
+                        messages_from_external: ~
+                            # binding_keys: [normal]
+
             failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 
